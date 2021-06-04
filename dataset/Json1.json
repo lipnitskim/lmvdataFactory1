@@ -10,7 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "output"
+				"fileName": "output",
+				"container": "mydatacontainer1"
 			}
 		},
 		"schema": {}
