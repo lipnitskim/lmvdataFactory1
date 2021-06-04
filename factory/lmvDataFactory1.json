@@ -1,0 +1,9 @@
+{
+	"name": "lmvDataFactory1",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3bbc7b7d-4f6d-4091-ba43-d5ac6f7d89b7",
+		"tenantId": "88f4d6f5-65df-480a-840d-c0af9d3cc59e"
+	}
+}
