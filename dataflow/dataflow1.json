@@ -12,7 +12,15 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Json1",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "ConditionalSplit1"
@@ -37,9 +45,27 @@
 				},
 				{
 					"name": "Select3"
+				},
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "Select4"
+				},
+				{
+					"name": "DerivedColumn1"
+				},
+				{
+					"name": "DerivedColumn2"
+				},
+				{
+					"name": "Join2"
+				},
+				{
+					"name": "Select5"
 				}
 			],
-			"script": "source(output(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string,\n\t\tColumn_23 as string,\n\t\tColumn_24 as string,\n\t\tColumn_25 as string,\n\t\tColumn_26 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(locate(\"Распределение по месяцам\", Column_1)!=0,\n\tdisjoint: false) ~> ConditionalSplit1@(measurename, data)\nConditionalSplit1@data split(isNull(Column_1),\n\tdisjoint: false) ~> ConditionalSplit2@(chanelNames, chandata)\nConditionalSplit1@measurename select(mapColumn(\n\t\tMeasureName = Column_3\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nConditionalSplit2@chandata filter(Column_1!=\"Итого\") ~> Filtered\nFiltered select(mapColumn(\n\t\tColumn_1,\n\t\tColumn_3,\n\t\tColumn_4,\n\t\tColumn_5,\n\t\tColumn_6,\n\t\tColumn_7,\n\t\tColumn_8,\n\t\tColumn_9,\n\t\tColumn_10,\n\t\tColumn_11,\n\t\tColumn_12,\n\t\tColumn_13,\n\t\tColumn_14,\n\t\tColumn_15,\n\t\tColumn_16,\n\t\tColumn_17,\n\t\tColumn_18,\n\t\tColumn_19,\n\t\tColumn_20,\n\t\tColumn_21,\n\t\tColumn_22,\n\t\tColumn_23,\n\t\tColumn_24,\n\t\tColumn_25,\n\t\tColumn_26\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 unpivot(output(\n\t\tchannel as string,\n\t\tAmount as string\n\t),\n\tungroupBy(Column_1),\n\tlateral: true,\n\tignoreNullPivots: true,\n\tpartitionBy('hash', 1)) ~> Unpivot1\nSelect3 unpivot(output(\n\t\tid as string,\n\t\tname as string\n\t),\n\tungroupBy(Column_1),\n\tlateral: false,\n\tignoreNullPivots: false) ~> Unpivot2\nConditionalSplit2@chanelNames select(mapColumn(\n\t\tColumn_1,\n\t\tColumn_3,\n\t\tColumn_4,\n\t\tColumn_5,\n\t\tColumn_6,\n\t\tColumn_7,\n\t\tColumn_8,\n\t\tColumn_9,\n\t\tColumn_10,\n\t\tColumn_11,\n\t\tColumn_12,\n\t\tColumn_13,\n\t\tColumn_14,\n\t\tColumn_15,\n\t\tColumn_16,\n\t\tColumn_17,\n\t\tColumn_18,\n\t\tColumn_19,\n\t\tColumn_20,\n\t\tColumn_21,\n\t\tColumn_22,\n\t\tColumn_23,\n\t\tColumn_24,\n\t\tColumn_25,\n\t\tColumn_26\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select3"
+			"script": "source(output(\n\t\tColumn_1 as string,\n\t\tColumn_2 as string,\n\t\tColumn_3 as string,\n\t\tColumn_4 as string,\n\t\tColumn_5 as string,\n\t\tColumn_6 as string,\n\t\tColumn_7 as string,\n\t\tColumn_8 as string,\n\t\tColumn_9 as string,\n\t\tColumn_10 as string,\n\t\tColumn_11 as string,\n\t\tColumn_12 as string,\n\t\tColumn_13 as string,\n\t\tColumn_14 as string,\n\t\tColumn_15 as string,\n\t\tColumn_16 as string,\n\t\tColumn_17 as string,\n\t\tColumn_18 as string,\n\t\tColumn_19 as string,\n\t\tColumn_20 as string,\n\t\tColumn_21 as string,\n\t\tColumn_22 as string,\n\t\tColumn_23 as string,\n\t\tColumn_24 as string,\n\t\tColumn_25 as string,\n\t\tColumn_26 as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> source1\nsource1 split(locate(\"Распределение по месяцам\", Column_1)!=0,\n\tdisjoint: false) ~> ConditionalSplit1@(measurename, data)\nConditionalSplit1@data split(isNull(Column_1),\n\tdisjoint: false) ~> ConditionalSplit2@(chanelNames, chandata)\nDerivedColumn2 select(mapColumn(\n\t\tmeasureName = Column_3,\n\t\tid\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nConditionalSplit2@chandata filter(Column_1!=\"Итого\") ~> Filtered\nFiltered select(mapColumn(\n\t\tColumn_1,\n\t\tColumn_3,\n\t\tColumn_4,\n\t\tColumn_5,\n\t\tColumn_6,\n\t\tColumn_7,\n\t\tColumn_8,\n\t\tColumn_9,\n\t\tColumn_10,\n\t\tColumn_11,\n\t\tColumn_12,\n\t\tColumn_13,\n\t\tColumn_14,\n\t\tColumn_15,\n\t\tColumn_16,\n\t\tColumn_17,\n\t\tColumn_18,\n\t\tColumn_19,\n\t\tColumn_20,\n\t\tColumn_21,\n\t\tColumn_22,\n\t\tColumn_23,\n\t\tColumn_24,\n\t\tColumn_25,\n\t\tColumn_26\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 unpivot(output(\n\t\tchannel as string,\n\t\tAmount as string\n\t),\n\tungroupBy(Column_1),\n\tlateral: true,\n\tignoreNullPivots: true,\n\tpartitionBy('hash', 1)) ~> Unpivot1\nSelect3 unpivot(output(\n\t\tid as string,\n\t\tname as string\n\t),\n\tungroupBy(Column_1),\n\tlateral: false,\n\tignoreNullPivots: false) ~> Unpivot2\nConditionalSplit2@chanelNames select(mapColumn(\n\t\tColumn_1,\n\t\tColumn_3,\n\t\tColumn_4,\n\t\tColumn_5,\n\t\tColumn_6,\n\t\tColumn_7,\n\t\tColumn_8,\n\t\tColumn_9,\n\t\tColumn_10,\n\t\tColumn_11,\n\t\tColumn_12,\n\t\tColumn_13,\n\t\tColumn_14,\n\t\tColumn_15,\n\t\tColumn_16,\n\t\tColumn_17,\n\t\tColumn_18,\n\t\tColumn_19,\n\t\tColumn_20,\n\t\tColumn_21,\n\t\tColumn_22,\n\t\tColumn_23,\n\t\tColumn_24,\n\t\tColumn_25,\n\t\tColumn_26\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select3\nUnpivot1, Unpivot2 join(channel == id,\n\tjoinType:'left',\n\tbroadcast: 'auto')~> Join1\nJoin1 select(mapColumn(\n\t\tname,\n\t\tmonth = Unpivot1@Column_1,\n\t\tAmount\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select4\nSelect4 derive(measure_id = 1) ~> DerivedColumn1\nConditionalSplit1@measurename derive(id = 1) ~> DerivedColumn2\nSelect1, DerivedColumn1 join(id == measure_id,\n\tjoinType:'right',\n\tbroadcast: 'auto')~> Join2\nJoin2 select(mapColumn(\n\t\tstationName = name,\n\t\tmonth,\n\t\tmeasureName,\n\t\tAmount\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select5\nSelect5 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
 		}
 	}
 }
